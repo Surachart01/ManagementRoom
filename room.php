@@ -1,19 +1,20 @@
 <?php
-session_start();
-if (isset($_SESSION['auth'])) {
-    if ($_SESSION['auth']->role == '1') {
-        header("location:login.php");
-    }
-} else {
-    header("location:login.php");
-}
 
 try {
+    session_start();
     include("./include/connect.php");
+    if (!isset($_SESSION['auth'])) {
+        header("Location: ./login.php");
+    } else {
+        if ($_SESSION['auth']->role == '1') {
+            header("Location: ./index.php");
+        }
+    }
+    $dataUser = $_SESSION['auth'];
     $sqlRooms = "SELECT * FROM rooms ";
     $qRooms = $db->query($sqlRooms);
 } catch (\Throwable $th) {
-    //throw $th;
+    echo $th;
 }
 ?>
 <!doctype html>
@@ -97,7 +98,7 @@ try {
         <div class="col-10">
             <div class="content mx-3 my-3">
                 <div class="d-flex justify-content-between px-3 py-3 " style="background-color:rgb(220, 220, 218);">
-                    <a href="./admin.php" class="mt-auto">UserName</a>
+                    <a href="./admin.php" class="mt-auto"><?= $dataUser->firstName ?></a>
                     <a href="./backend/logout.php" class="mt-auto">ออกจากระบบ</a>
                 </div>
                 <div class="row px-3 py-2">

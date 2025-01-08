@@ -1,8 +1,18 @@
 <?php
-session_start();
-include("./include/connect.php");
+
+
 try {
-    $sqlCheckReserve = "SELECT rooms.roomName, rooms.codeRoom, orders.date, orders.id FROM orders  INNER JOIN rooms ON rooms.id = orders.roomId ";
+    session_start();
+    include("./include/connect.php");
+    if (!isset($_SESSION['auth'])) {
+        header("Location: ./login.php");
+    }else{
+        if($_SESSION['auth']->role == '1'){
+            header("Location: ./index.php");
+        }
+    }
+    $dataUser = $_SESSION['auth'];
+    $sqlCheckReserve = "SELECT rooms.roomName, rooms.codeRoom, orders.date, orders.id,users.firstName,users.lastName FROM orders  INNER JOIN rooms ON rooms.id = orders.roomId INNER JOIN users ON users.id = orders.userId WHERE orders.date >= CURRENT_DATE";
     // WHERE date >= CURRENT_DATE
     $qCheckReserve = $db->query($sqlCheckReserve);
 } catch (\Throwable $th) {
@@ -91,7 +101,7 @@ try {
         <div class="col-10">
             <div class="content mx-3 my-3">
                 <div class="d-flex justify-content-between px-3 py-3 " style="background-color:rgb(220, 220, 218);">
-                    <a href="./admin.php" class="mt-auto">UserName</a>
+                    <a href="./admin.php" class="mt-auto"><?= $dataUser->firstName?></a>
                     <a href="./backend/logout.php" class="mt-auto">ออกจากระบบ</a>
                 </div>
                 <div class="row px-3 py-2">
@@ -101,9 +111,10 @@ try {
                                 <th>#</th>
                                 <th>ชื่อห้อง</th>
                                 <th>เลขห้อง</th>
+                                <th>ผู้จอง</th>
                                 <th>วันที่จอง</th>
+                                <th>แก้ไขวันที่ </th>
                                 <th>ยกเลิก</th>
-                                <th>แก้ไขวันที่</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -115,6 +126,7 @@ try {
                                     <td><?php echo $i ?></td>
                                     <td><?php echo $item->roomName ?></td>
                                     <td><?php echo $item->codeRoom ?></td>
+                                    <td><?php echo $item->firstName ." ". $item->lastName  ?></td>
                                     <td><?php echo $item->date ?></td>
                                     <td><button class="btn btn-warning" data-id="<?php echo $item->id ?>" id="edit">แก้ไข</button></td>
                                     <td><button class="btn btn-danger" data-id="<?php echo $item->id ?>" id="delete">ลบ</button></td>
@@ -162,7 +174,16 @@ try {
 
         $(document).on("input", "#changeDate", function() { //success
             let date = $(this).val();
+            let selectedDate = new Date(date);
+            let currentDate = new Date();
+            if (selectedDate < currentDate.setHours(0,0,0,0)) {
+                $('#btnEdit').attr('disabled', true)
+                $('#alert').html("โปรดเลือกวันที่ใหม่");
+                return;
+            }
+
             let roomId = $(this).data("room");
+
             let formData = new FormData();
             let orderId = $('#btnEdit').data("id");
             formData.append("date", date);

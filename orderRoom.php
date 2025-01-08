@@ -33,15 +33,15 @@ if (isset($_GET['roomCode'])) {
 <body style="min-height:100vh;">
     <input type="hidden" value="<?php echo $roomCode ?>" id="roomCode">
     <div class="row">
-        <div class="col-12 d-flex justify-content-between px-5 py-4 bg-dark text-light shadow">
-            <p class="my-auto">Navbar Logo</p>
-            <div class="d-flex">
+    <div class="col-12 d-flex justify-content-between bg-dark px-4  py-1 text-light shadow">
+            <p class="my-auto"><img src="./images/Logo.gif" width="80px" alt=""></p>
+            <div class="d-flex my-auto ">
                 <a class="dropdown-toggle text-light" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     คุณ <?php echo $dataUser->firstName ?>
                 </a>
                 <ul class="dropdown-menu">
                     <li><a class="dropdown-item" href="./reserveRoomHis.php">รายการจองห้อง</a></li>
-                    <li><a class="dropdown-item" href="./orderRoom.php">โปรไฟล์</a></li>
+                    <li><a class="dropdown-item" href="./profile.php">โปรไฟล์</a></li>
                     <li><a class="dropdown-item" href="./backend/logout.php">ออกจากระบบ</a></li>
                 </ul>
 
@@ -73,8 +73,8 @@ if (isset($_GET['roomCode'])) {
 
         function addOrderRoom(info) {
             const clickedDate = info.dateStr; // วันที่ที่กดในปฏิทิน
-
-            if (new Date(clickedDate) < new Date()) {
+            
+            if (new Date(clickedDate).toISOString().split('T')[0] < new Date().toISOString().split('T')[0]) {
                 // เงื่อนไขถ้าวันที่อยู่ในอดีต
                 console.log("This is a past date.");
                 // ทำสิ่งที่ต้องการเมื่อวันที่อยู่ในอดีต

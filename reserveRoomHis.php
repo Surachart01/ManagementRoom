@@ -3,11 +3,11 @@ session_start();
 if (isset($_SESSION['auth'])) {
     $dataUser = $_SESSION['auth'];
 } else {
-    // header("location:login.php");
+    header("location:login.php");
 }
 
 include("./include/connect.php");
-$sqlOrder = "SELECT * FROM orders";
+$sqlOrder = "SELECT * FROM orders WHERE userId = '$dataUser->id'";
 $qOrder = $db->query($sqlOrder);
 $rOrder = $qOrder->num_rows;
 ?>
@@ -32,15 +32,15 @@ $rOrder = $qOrder->num_rows;
 
 <body style="min-height:100vh;">
     <div class="row">
-        <div class="col-12 d-flex justify-content-between px-5 py-4 bg-dark text-light shadow">
-            <p class="my-auto">Navbar Logo</p>
-            <div class="d-flex">
+    <div class="col-12 d-flex justify-content-between bg-dark px-4  py-1 text-light shadow">
+            <p class="my-auto"><img src="./images/Logo.gif" width="80px" alt=""></p>
+            <div class="d-flex my-auto ">
                 <a class="dropdown-toggle text-light" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     คุณ <?php echo $dataUser->firstName ?>
                 </a>
                 <ul class="dropdown-menu">
                     <li><a class="dropdown-item" href="./reserveRoomHis.php">รายการจองห้อง</a></li>
-                    <li><a class="dropdown-item" href="#">โปรไฟล์</a></li>
+                    <li><a class="dropdown-item" href="./profile.php">โปรไฟล์</a></li>
                     <li><a class="dropdown-item" href="./backend/logout.php">ออกจากระบบ</a></li>
                 </ul>
 

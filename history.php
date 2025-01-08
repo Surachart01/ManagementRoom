@@ -1,7 +1,16 @@
 <?php
-session_start();
-include("./include/connect.php");
+
 try {
+    session_start();
+    include("./include/connect.php");
+    if (!isset($_SESSION['auth'])) {
+        header("Location: ./login.php");
+    } else {
+        if ($_SESSION['auth']->role == '1') {
+            header("Location: ./index.php");
+        }
+    }
+    $dataUser = $_SESSION['auth'];
     $sqlCheckReserve = "SELECT rooms.roomName, rooms.codeRoom, orders.date, orders.id FROM orders  INNER JOIN rooms ON rooms.id = orders.roomId ";
     // WHERE date >= CURRENT_DATE
     $qCheckReserve = $db->query($sqlCheckReserve);
@@ -80,7 +89,7 @@ try {
                 <a href="./history.php" class="py-2 menu" style="background-color:rgb(146, 141, 125); color:#fff;">
                     ประวัติการจองห้อง
                 </a>
-                <a href="./room.php" class="py-2 menu" >
+                <a href="./room.php" class="py-2 menu">
                     รายการห้อง
                 </a>
                 <a href="./user.php" class="py-2 menu">
@@ -91,7 +100,7 @@ try {
         <div class="col-10">
             <div class="content mx-3 my-3">
                 <div class="d-flex justify-content-between px-3 py-3 " style="background-color:rgb(220, 220, 218);">
-                    <a href="./admin.php" class="mt-auto">UserName</a>
+                    <a href="./admin.php" class="mt-auto"><?= $dataUser->firstName?></a>
                     <a href="./backend/logout.php" class="mt-auto">ออกจากระบบ</a>
                 </div>
                 <div class="row px-3 py-2">
