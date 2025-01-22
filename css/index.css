@@ -5,6 +5,7 @@
     font-weight: 400;
     font-style: normal;
     overflow-x: hidden;
+    overflow-y: hidden;
 }
 
 a{

@@ -83,9 +83,6 @@ try {
                 <a href="./admin.php" class="py-2 menu">
                     หน้าหลัก
                 </a>
-                <a href="./recserveRoom.php" class="py-2 menu">
-                    การจองห้อง
-                </a>
                 <a href="./history.php" class="py-2 menu" style="background-color:rgb(146, 141, 125); color:#fff;">
                     ประวัติการจองห้อง
                 </a>

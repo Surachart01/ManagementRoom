@@ -16,3 +16,4 @@
 <hr>
 <p>ชื่อห้อง : <?php echo $data->roomName ?></p>
 <p>รหัสห้อง : <?php echo $data->codeRoom ?></p>
+<p>รายละเอียด : <?php echo $data->description ?></p>

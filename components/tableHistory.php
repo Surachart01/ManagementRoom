@@ -2,7 +2,7 @@
     include("../include/connect.php");
     try {
         $month = $_POST['month'];
-        $sqlLog = "SELECT * FROM orders INNER JOIN rooms ON orders.roomId = rooms.id INNER JOIN users ON orders.userId = users.id WHERE date LIKE '$month%'";
+        $sqlLog = "SELECT * FROM orders INNER JOIN rooms ON orders.roomId = rooms.id INNER JOIN users ON orders.userId = users.id WHERE date LIKE '$month%' AND status = '1'";
         $qLog = $db->query($sqlLog);
     } catch (\Throwable $th) {
         echo $th;

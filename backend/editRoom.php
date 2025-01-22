@@ -4,6 +4,7 @@ try {
     $roomId = $_POST['roomId'];
     $codeRoom = $_POST['codeRoom'];
     $roomName = $_POST['roomName'];
+    $description = $_POST['description'];
 
     if (isset($_FILES['image'])) {
         $image = $_FILES['image'];
@@ -19,7 +20,7 @@ try {
             $qUpdateImage = $db->query($sqlUpdateimage);
         }
     }
-    $sqlUpdateDes = "UPDATE rooms SET roomName = '$roomName' , codeRoom = '$codeRoom' WHERE id = '$roomId'";
+    $sqlUpdateDes = "UPDATE rooms SET roomName = '$roomName' , codeRoom = '$codeRoom',description = '$description' WHERE id = '$roomId'";
     $qUpdateDes = $db->query($sqlUpdateDes);
     if($qUpdateDes){
         echo json_encode(['status' => '200','message'=>"เสร็จสิ้น"]);

@@ -4,6 +4,8 @@
 <input type="text" class="form-control" id="roomName">
 <label for="">เลขห้อง</label>
 <input type="text" class="form-control" id="codeRoom">
+<label for="">รายละเอียด</label>
+<textarea name="" id="description" class="form-control"></textarea>
 <label for="">รูปห้อง</label>
 <input type="file" class="form-control" id="image">
 <button class="btn btn-success form-control my-2" id="btnInsert">ยืนยัน</button>

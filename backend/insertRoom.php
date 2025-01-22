@@ -3,6 +3,7 @@ try {
     include("../include/connect.php");
     $codeRoom = $_POST['codeRoom'];
     $roomName = $_POST['roomName'];
+    $description = $_POST['description'];
 
     if (isset($_FILES['image'])) {
         $image = $_FILES['image'];
@@ -14,7 +15,7 @@ try {
             $upload_profile = "$upload_dir/$nameFile.$file_exp";
             move_uploaded_file($image['tmp_name'], $upload_profile);
             $nameImage = "./images/rooms/$nameFile.$file_exp";
-            $sqlUpdateimage = "INSERT INTO rooms (roomName,codeRoom,image) VALUES ('$roomName','$codeRoom','$nameImage')";
+            $sqlUpdateimage = "INSERT INTO rooms (roomName,codeRoom,image,description) VALUES ('$roomName','$codeRoom','$nameImage','$description')";
             $qUpdateImage = $db->query($sqlUpdateimage);
             if($qUpdateImage){
                 echo json_encode(['status' => '200','message'=>"เสร็จสิ้น"]);

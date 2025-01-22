@@ -76,11 +76,8 @@ $qUser = $db->query($sqlUSer);
         <div class="col-2 ">
             <div class="d-flex justify-content-center my-5 flex-column px-2">
 
-                <a href="./admin.php" class="py-2 menu" style="background-color:rgb(146, 141, 125); color:#fff;">
+                <a href="./admin.php" class="py-2 menu" >
                     หน้าหลัก
-                </a>
-                <a href="./recserveRoom.php" class="py-2 menu">
-                    การจองห้อง
                 </a>
                 <a href="./history.php" class="py-2 menu">
                     ประวัติการจองห้อง
@@ -88,7 +85,7 @@ $qUser = $db->query($sqlUSer);
                 <a href="./room.php" class="py-2 menu">
                     รายการห้อง
                 </a>
-                <a href="./user.php" class="py-2 menu">
+                <a href="./user.php" class="py-2 menu" style="background-color:rgb(146, 141, 125); color:#fff;">
                     ผู้ใช้งาน
                 </a>
             </div>
@@ -102,7 +99,7 @@ $qUser = $db->query($sqlUSer);
                 <div class="row px-3 py-2">
                    <button class="btn btn-primary form-control" id="insert">เพิ่มผู้ใช้งาน</button>
                    <hr>
-                   <table id="myTable">
+                   <table id="myTable ">
                         <thead>
                             <tr>
                                 <th>#</th>

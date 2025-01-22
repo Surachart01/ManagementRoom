@@ -81,9 +81,6 @@ try {
                 <a href="./admin.php" class="py-2 menu">
                     หน้าหลัก
                 </a>
-                <a href="./recserveRoom.php" class="py-2 menu">
-                    การจองห้อง
-                </a>
                 <a href="./history.php" class="py-2 menu">
                     ประวัติการจองห้อง
                 </a>
@@ -106,11 +103,12 @@ try {
                     <table id="myTable">
                         <thead>
                             <tr>
-                                <th>#</th>
-                                <th>รูปห้อง</th>
-                                <th>ชื่อห้อง</th>
-                                <th>เลขห้อง</th>
-                                <th></th>
+                                <th class="text-center" >#</th>
+                                <th class="text-center" >รูปห้อง</th>
+                                <th class="text-center" >ชื่อห้อง</th>
+                                <th class="text-center" >เลขห้อง</th>
+                                <th class="text-center" >รายละเอียด</th>
+                                <th class="text-center" ></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -123,6 +121,7 @@ try {
                                     <td><img src="<?php echo $item->image ?>" width="60px" alt=""></td>
                                     <td><?php echo $item->roomName ?></td>
                                     <td><?php echo $item->codeRoom ?></td>
+                                    <td><?php echo $item->description ?></td>
                                     <td>
                                         <button class="btn btn-warning" data-id="<?php echo $item->id ?>" id="edit">แก้ไข</button>
                                         <button class="btn btn-danger" data-id="<?php echo $item->id ?>" id="delete">ลบ</button>
@@ -194,8 +193,10 @@ try {
             }
             let roomName = $('#roomName').val();
             let codeRoom = $('#codeRoom').val();
+            let description = $('#description').val();
             formData.append("codeRoom", codeRoom)
             formData.append("roomName", roomName)
+            formData.append("description",description)
             $.ajax({
                 url: "./backend/insertRoom.php",
                 type: "POST",
@@ -238,9 +239,11 @@ try {
             let roomId = $(this).data("id");
             let roomName = $('#roomName').val();
             let codeRoom = $('#codeRoom').val();
+            let description = $('#description').val();
             formData.append("roomId", roomId)
             formData.append("codeRoom", codeRoom)
             formData.append("roomName", roomName)
+            formData.append("description",description)
             $.ajax({
                 url: "./backend/editRoom.php",
                 type: "POST",

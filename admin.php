@@ -1,20 +1,27 @@
 <?php
-session_start();
-if (isset($_SESSION['auth']) && isset($_SESSION['auth']->role)) {
-    if ($_SESSION['auth']->role != '0') {
+try {
+    session_start();
+    include("./include/connect.php");
+    if (isset($_SESSION['auth']) && isset($_SESSION['auth']->role)) {
+        if ($_SESSION['auth']->role != '0') {
+            header("Location: login.php");
+            exit();
+        }
+    } else {
         header("Location: login.php");
         exit();
     }
-} else {
-    header("Location: login.php");
-    exit();
+    $sqlUSer = "SELECT * FROM users WHERE role = '1'";
+    $qUser = $db->query($sqlUSer);
+    $sqlRooms = "SELECT * FROM orders WHERE date >= CURRENT_DATE";
+    $qRoom = $db->query($sqlRooms);
+    $dataUser = $_SESSION['auth'];
+    $sqlCheckReserve = "SELECT rooms.roomName, rooms.codeRoom, orders.date, orders.id,users.firstName,users.lastName FROM orders  INNER JOIN rooms ON rooms.id = orders.roomId INNER JOIN users ON users.id = orders.userId WHERE orders.date >= CURRENT_DATE AND status ='0' ";
+    // WHERE date >= CURRENT_DATE
+    $qCheckReserve = $db->query($sqlCheckReserve);
+} catch (\Throwable $th) {
+    echo $th;
 }
-
-include("./include/connect.php");
-$sqlUSer = "SELECT * FROM users WHERE role = '1'";
-$qUser = $db->query($sqlUSer);
-$sqlRooms= "SELECT * FROM orders WHERE date >= CURRENT_DATE";
-$qRoom = $db->query($sqlRooms);
 ?>
 
 <!doctype html>
@@ -36,10 +43,12 @@ $qRoom = $db->query($sqlRooms);
         crossorigin="anonymous" />
     <link rel="icon" type="image/gif" href="./images/Logo.gif">
     <link rel="stylesheet" href="./css/index.css">
+    <link rel="stylesheet" href="//cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css">
     <style>
         body {
             background-color: #4C585B;
             height: 100vh;
+            overflow-y: hidden;
         }
 
         .col-2 {
@@ -80,9 +89,6 @@ $qRoom = $db->query($sqlRooms);
                 <a href="./admin.php" class="py-2 menu" style="background-color:rgb(146, 141, 125); color:#fff;">
                     หน้าหลัก
                 </a>
-                <a href="./recserveRoom.php" class="py-2 menu">
-                    การจองห้อง
-                </a>
                 <a href="./history.php" class="py-2 menu">
                     ประวัติการจองห้อง
                 </a>
@@ -117,22 +123,307 @@ $qRoom = $db->query($sqlRooms);
                             </div>
                         </div>
                     </div>
-                    <hr class="my-3" />
+                    <hr class=" my-3" />
+                        </div>
+
+                        <div class="content mx-3 ">
+                            <div class="row px-3 py-2">
+                                <table class="table table-responsive table-hover mb-2" id="myTable">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">#</th>
+                                            <th class="text-center">ชื่อห้อง</th>
+                                            <th class="text-center">เลขห้อง</th>
+                                            <th class="text-center">ผู้จอง</th>
+                                            <th class="text-center">วันที่จอง</th>
+                                            <th class="text-center">ยืนยัน</th>
+                                            <th class="text-center">แก้ไขวันที่ </th>
+                                            <th class="text-center">ยกเลิก</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                        $i = 1;
+                                        while ($item = $qCheckReserve->fetch_object()) {
+                                        ?>
+                                            <tr>
+                                                <td><?php echo $i ?></td>
+                                                <td><?php echo $item->roomName ?></td>
+                                                <td><?php echo $item->codeRoom ?></td>
+                                                <td><?php echo $item->firstName . " " . $item->lastName  ?></td>
+                                                <td><?php echo $item->date ?></td>
+                                                <td>
+                                                    <button class="btn btn-success" id="confirm" data-id="<?php echo $item->id ?>">อนุมัติ</button>
+                                                    <button class="btn btn-danger" id="notConfirm" data-id="<?php echo $item->id ?>">ไม่อนุมัติ</button>
+                                                </td>
+                                                <td><button class="btn btn-warning" data-id="<?php echo $item->id ?>" id="edit">แก้ไข</button></td>
+                                                <td><button class="btn btn-danger" data-id="<?php echo $item->id ?>" id="delete">ลบ</button></td>
+                                            </tr>
+                                        <?php
+                                            $i++;
+                                        }
+                                        ?>
+                                    </tbody>
+                                </table>
+                                <hr class="my-3" />
+                            </div>
+
+                        </div>
+
+                    </div>
                 </div>
-
             </div>
-        </div>
-    </div>
-    <!-- Bootstrap JavaScript Libraries -->
-    <script
-        src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
-        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
-        crossorigin="anonymous"></script>
+            <!-- Bootstrap JavaScript Libraries -->
+            <!-- Bootstrap JavaScript Libraries -->
+            <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+            <script src="https://cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <script
-        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
-        integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
-        crossorigin="anonymous"></script>
+            <script>
+                let table = new DataTable('#myTable');
+
+                $(document).on("click","#confirm",function(){
+                    Swal.fire({
+                        title: "คุณแน่ใจหรือไม่?",
+                        text: "คุณต้องการอนุมัติการจองนี้หรือไม่?",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "ยืนยัน",
+                        cancelButtonText: "ยกเลิก",
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            let orderId = $(this).data("id");
+                            let formData = new FormData();
+                            formData.append("orderId",orderId);
+                            $.ajax({
+                                url:"./backend/confirmOrder.php",
+                                type:"POST",
+                                data:formData,
+                                dataType:'json',
+                                contentType:false,
+                                processData:false,
+                                success:function(res){
+                                    if(res.status == '200'){
+                                        Swal.fire({
+                                            title:"อนุมัติการจองเสร็จสิ้น",
+                                            icon:"success",
+                                            showConfirmButton:false,
+                                            timer:1500
+                                        }).then(() => {
+                                            window.location.reload()
+                                        })
+                                    }else{
+                                        Swal.fire({
+                                            title:"เกิดข้อผิดพลาด",
+                                            icon:"error",
+                                            showConfirmButton:false,
+                                            timer:1500
+                                        }).then(() => {
+                                            window.location.reload()
+                                        })
+                                    }
+                                }
+                            })
+                        }
+                    })
+                })
+
+                $(document).on("click","#notConfirm",function(){
+                    Swal.fire({
+                        title: "คุณแน่ใจหรือไม่?",
+                        text: "คุณต้องการไม่อนุมัติการจองนี้หรือไม่?",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "ยืนยัน",
+                        cancelButtonText: "ยกเลิก",
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            let orderId = $(this).data("id");
+                            let formData = new FormData();
+                            formData.append("orderId",orderId);
+
+                            $.ajax({
+                                url:"./backend/unConfirmOrder.php",
+                                type:"POST",
+                                data:formData,
+                                dataType:'json',
+                                contentType:false,
+                                processData:false,
+                                success:function(res){
+                                    if(res.status == '200'){
+                                        Swal.fire({
+                                            title:"ไม่อนุมัติการจองเสร็จสิ้น",
+                                            icon:"success",
+                                            showConfirmButton:false,
+                                            timer:1500
+                                        }).then(() => {
+                                            window.location.reload()
+                                        })
+                                    }else{
+                                        Swal.fire({
+                                            title:"เกิดข้อผิดพลาด",
+                                            icon:"error",
+                                            showConfirmButton:false,
+                                            timer:1500
+                                        }).then(() => {
+                                            window.location.reload()
+                                        })
+                                    }
+                                }
+                            })
+                        }
+                    })
+                })
+
+                $(document).on("click", "#edit", function() { //success
+                    let orderId = $(this).data("id");
+                    let formData = new FormData();
+                    formData.append("orderId", orderId);
+                    $.ajax({
+                        url: "./components/editOrder.php",
+                        type: "POST",
+                        data: formData,
+                        dataType: "html",
+                        contentType: false,
+                        processData: false,
+                        success: function(res) {
+                            Swal.fire({
+                                html: res,
+                                showConfirmButton: false,
+                            })
+                        }
+                    })
+                })
+
+                $(document).on("input", "#changeDate", function() { //success
+                    let date = $(this).val();
+                    let selectedDate = new Date(date);
+                    let currentDate = new Date();
+                    if (selectedDate < currentDate.setHours(0, 0, 0, 0)) {
+                        $('#btnEdit').attr('disabled', true)
+                        $('#alert').html("โปรดเลือกวันที่ใหม่");
+                        return;
+                    }
+
+                    let roomId = $(this).data("room");
+
+                    let formData = new FormData();
+                    let orderId = $('#btnEdit').data("id");
+                    formData.append("date", date);
+                    formData.append("orderId", orderId);
+                    formData.append("roomId", roomId);
+                    $.ajax({
+                        url: "./backend/checkServe.php",
+                        type: "POST",
+                        data: formData,
+                        dataType: "json",
+                        contentType: false,
+                        processData: false,
+                        success: function(res) {
+                            console.log(res)
+                            if (res.status == 200) {
+                                console.log('tt')
+                                $('#btnEdit').attr('disabled', false)
+                                $('#alert').html("")
+                            } else {
+                                console.log('uu')
+                                $('#btnEdit').attr('disabled', true)
+                                $('#alert').html("ติดจองแล้ว");
+                            }
+                        }
+                    })
+                })
+
+                $(document).on("click", "#btnEdit", function() { //success
+                    let orderId = $(this).data("id")
+                    let date = $('#changeDate').val()
+                    let formData = new FormData();
+                    formData.append("orderId", orderId);
+                    formData.append("date", date)
+                    $.ajax({
+                        url: "./backend/editOrder.php",
+                        type: "POST",
+                        data: formData,
+                        dataType: "json",
+                        contentType: false,
+                        processData: false,
+                        success: function(res) {
+                            if (res.status == 200) {
+                                Swal.fire({
+                                    title: "แก้ไขวันที่เสร็จสิ้น",
+                                    icon: "success",
+                                    timer: 1000,
+                                    showConfirmButton: false,
+                                }).then(() => {
+                                    window.location.reload();
+                                })
+                            } else {
+                                Swal.fire({
+                                    title: "เกิดข้อผิดพลาด โปรดลองอีกครั้ง",
+                                    icon: "error",
+                                    timer: 1000,
+                                    showConfirmButton: false,
+                                }).then(() => {
+                                    window.location.reload();
+                                })
+                            }
+                        }
+                    })
+                })
+
+                $(document).on("click", "#delete", function() { //success
+                    Swal.fire({
+                        title: "ต้องการยกเลิกการจองใช้หรือไม่",
+                        icon: "info",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "ยืนยัน"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            let orderId = $(this).data("id");
+                            let formData = new FormData();
+                            formData.append("orderId", orderId);
+                            $.ajax({
+                                url: "./backend/deleteOrder.php",
+                                type: "POST",
+                                data: formData,
+                                dataType: "json",
+                                contentType: false,
+                                processData: false,
+                                success: function(res) {
+                                    if (res.status == '200') {
+                                        Swal.fire({
+                                            title: "ลบการจองเสร็จสิ้น",
+                                            icon: "success",
+                                            showConfirmButton: false,
+                                            timer: 1000
+                                        }).then(() => {
+                                            window.location.reload()
+                                        })
+
+                                    } else {
+                                        Swal.fire({
+                                            title: "เกิดข้อผิดพลาด",
+                                            icon: "error",
+                                            showConfirmButton: false,
+                                            timer: 1000
+                                        }).then(() => {
+                                            window.location.reload()
+                                        })
+                                    }
+                                }
+                            })
+                        }
+                    })
+                })
+            </script>
 </body>
 
 </html>
