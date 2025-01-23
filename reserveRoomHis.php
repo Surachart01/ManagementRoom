@@ -60,6 +60,7 @@ $rOrder = $qOrder->num_rows;
                                 <th class="text-center">รูป</th>
                                 <th class="text-center">ชื่อห้อง</th>
                                 <th class="text-center">วันที่จอง</th>
+                                <th class="text-center">เวลา</th>
                                 <th class="text-center"></th>
                             </tr>
                         </thead>
@@ -77,6 +78,7 @@ $rOrder = $qOrder->num_rows;
                                     <td class="text-center"><img width="100px" src="<?php echo $itemRoom->image ?>" alt=""></td>
                                     <td class="text-center"><?php echo $itemRoom->roomName ?></td>
                                     <td class="text-center"><?php echo $item->date ?></td>
+                                    <td class="text-center"><?php echo $item->time ?></td>
                                     <td class="text-center"><button class="btn btn-danger" data-id="<?php echo $item->id ?>" id="cancelReserve">ยกเลิก</button></td>
                                 </tr>
 

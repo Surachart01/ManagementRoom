@@ -16,7 +16,7 @@ try {
     $sqlRooms = "SELECT * FROM orders WHERE date >= CURRENT_DATE";
     $qRoom = $db->query($sqlRooms);
     $dataUser = $_SESSION['auth'];
-    $sqlCheckReserve = "SELECT rooms.roomName, rooms.codeRoom, orders.date, orders.id,users.firstName,users.lastName FROM orders  INNER JOIN rooms ON rooms.id = orders.roomId INNER JOIN users ON users.id = orders.userId WHERE orders.date >= CURRENT_DATE AND status ='0' ";
+    $sqlCheckReserve = "SELECT rooms.roomName, rooms.codeRoom, orders.date,orders.time, orders.id,users.firstName,users.lastName FROM orders  INNER JOIN rooms ON rooms.id = orders.roomId INNER JOIN users ON users.id = orders.userId WHERE orders.date >= CURRENT_DATE AND status ='0' ";
     // WHERE date >= CURRENT_DATE
     $qCheckReserve = $db->query($sqlCheckReserve);
 } catch (\Throwable $th) {
@@ -136,6 +136,7 @@ try {
                                             <th class="text-center">เลขห้อง</th>
                                             <th class="text-center">ผู้จอง</th>
                                             <th class="text-center">วันที่จอง</th>
+                                            <th class="text-center">เวลา</th>
                                             <th class="text-center">ยืนยัน</th>
                                             <th class="text-center">แก้ไขวันที่ </th>
                                             <th class="text-center">ยกเลิก</th>
@@ -152,6 +153,7 @@ try {
                                                 <td><?php echo $item->codeRoom ?></td>
                                                 <td><?php echo $item->firstName . " " . $item->lastName  ?></td>
                                                 <td><?php echo $item->date ?></td>
+                                                <td><?php echo $item->time ?></td>
                                                 <td>
                                                     <button class="btn btn-success" id="confirm" data-id="<?php echo $item->id ?>">อนุมัติ</button>
                                                     <button class="btn btn-danger" id="notConfirm" data-id="<?php echo $item->id ?>">ไม่อนุมัติ</button>

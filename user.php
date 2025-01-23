@@ -76,7 +76,7 @@ $qUser = $db->query($sqlUSer);
         <div class="col-2 ">
             <div class="d-flex justify-content-center my-5 flex-column px-2">
 
-                <a href="./admin.php" class="py-2 menu" >
+                <a href="./admin.php" class="py-2 menu">
                     หน้าหลัก
                 </a>
                 <a href="./history.php" class="py-2 menu">
@@ -97,9 +97,9 @@ $qUser = $db->query($sqlUSer);
                     <a href="./backend/logout.php" class="mt-auto">ออกจากระบบ</a>
                 </div>
                 <div class="row px-3 py-2">
-                   <button class="btn btn-primary form-control" id="insert">เพิ่มผู้ใช้งาน</button>
-                   <hr>
-                   <table id="myTable ">
+                    <button class="btn btn-primary form-control" id="insert">เพิ่มผู้ใช้งาน</button>
+                    <hr>
+                    <table id="myTable">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -112,25 +112,25 @@ $qUser = $db->query($sqlUSer);
                             </tr>
                         </thead>
                         <tbody>
-                            <?php  
+                            <?php
                             $i = 1;
-                                while($item = $qUser->fetch_object()){
+                            while ($item = $qUser->fetch_object()) {
                             ?>
-                            <tr>
-                                <td><?php echo $i ?></td>
-                                <td><?php echo $item->firstName ?></td>
-                                <td><?php echo $item->lastName ?></td>
-                                <td><?php echo $item->email ?></td>
-                                <td><?php echo ($item->role == 0) ? 'admin' : 'user'; ?></td>
-                                <td><button class="btn btn-warning" id="editPassword" data-id="<?php echo $item->id ?>">แก้ไขรหัสผ่าน</button></td>
-                                <td><button class="btn btn-primary" id="editProfile" data-id="<?php echo $item->id ?>">แก้ไขข้อมูลส่วนตัว</button></td>
-                            </tr>
-                            <?php 
-                            $i++; 
-                                }
+                                <tr>
+                                    <td><?php echo $i ?></td>
+                                    <td><?php echo $item->firstName ?></td>
+                                    <td><?php echo $item->lastName ?></td>
+                                    <td><?php echo $item->email ?></td>
+                                    <td><?php echo ($item->role == 0) ? 'admin' : 'user'; ?></td>
+                                    <td><button class="btn btn-warning" id="editPassword" data-id="<?php echo $item->id ?>">แก้ไขรหัสผ่าน</button></td>
+                                    <td><button class="btn btn-primary" id="editProfile" data-id="<?php echo $item->id ?>">แก้ไขข้อมูลส่วนตัว</button></td>
+                                </tr>
+                            <?php
+                                $i++;
+                            }
                             ?>
                         </tbody>
-                   </table>
+                    </table>
                 </div>
 
             </div>
@@ -144,60 +144,61 @@ $qUser = $db->query($sqlUSer);
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
+
         let table = new DataTable('#myTable');
-        
-        $(document).on("click","#insert",function(){
+
+        $(document).on("click", "#insert", function() {
             $.ajax({
-                url:"./components/insertProfile.php",
-                type:"POST",
-                dataType:"html",
-                contentType:false,
-                processData:false,
-                success:function(res){
+                url: "./components/insertProfile.php",
+                type: "POST",
+                dataType: "html",
+                contentType: false,
+                processData: false,
+                success: function(res) {
                     Swal.fire({
-                        html:res,
-                        showConfirmButton:false
+                        html: res,
+                        showConfirmButton: false
                     })
                 }
             })
         })
 
-        $(document).on("click","#submitInsert",function(){
+        $(document).on("click", "#submitInsert", function() {
             let firstName = $('#firstName').val()
             let lastName = $('#lastName').val()
             let email = $('#email').val()
             let password = $('#password').val()
             let role = $('#role').val()
             let formData = new FormData();
-            formData.append("firstName",firstName);
-            formData.append("lastName",lastName)
-            formData.append("email",email)
-            formData.append("password",password)
-            formData.append("role",role)
+            formData.append("firstName", firstName);
+            formData.append("lastName", lastName)
+            formData.append("email", email)
+            formData.append("password", password)
+            formData.append("role", role)
 
             $.ajax({
-                url:"./backend/insertUser.php",
-                type:"POST",
-                data:formData,
-                dataType:"json",
-                contentType:false,
-                processData:false,
-                success:function(res){
-                    if(res.status == 200){
+                url: "./backend/insertUser.php",
+                type: "POST",
+                data: formData,
+                dataType: "json",
+                contentType: false,
+                processData: false,
+                success: function(res) {
+                    if (res.status == 200) {
                         Swal.fire({
-                            title:"เพิ่มเสร็จสิ้น",
-                            icon:"success",
-                            timer:1000,
-                            showConfirmButton:false
+                            title: "เพิ่มเสร็จสิ้น",
+                            icon: "success",
+                            timer: 1000,
+                            showConfirmButton: false
                         }).then(() => {
                             window.location.reload()
                         })
-                    }else{
+                    } else {
                         Swal.fire({
-                            title:"เกิดข้อผิดพลาด",
-                            icon:"error",
-                            timer:1000,
-                            showConfirmButton:false
+                            title: "เกิดข้อผิดพลาด",
+                            icon: "error",
+                            timer: 1000,
+                            showConfirmButton: false
                         }).then(() => {
                             console.log(res.message)
                             window.location.reload()
@@ -207,84 +208,84 @@ $qUser = $db->query($sqlUSer);
             })
         })
 
-        $(document).on("click","#editPassword",function(){
+        $(document).on("click", "#editPassword", function() {
             let userId = $(this).data("id")
             let formData = new FormData()
-            formData.append("userId",userId);
+            formData.append("userId", userId);
 
             $.ajax({
-                url:"./components/editPassword.php",
-                type:"POST",
-                data:formData,
-                dataType:"html",
-                contentType:false,
-                processData:false,
-                success:function(res){
+                url: "./components/editPassword.php",
+                type: "POST",
+                data: formData,
+                dataType: "html",
+                contentType: false,
+                processData: false,
+                success: function(res) {
                     Swal.fire({
-                        html:res,
-                        showConfirmButton:false
+                        html: res,
+                        showConfirmButton: false
                     })
                 }
             })
         })
-        $(document).on("click","#editProfile",function(){
+        $(document).on("click", "#editProfile", function() {
             let userId = $(this).data("id")
             let formData = new FormData()
-            formData.append("userId",userId);
+            formData.append("userId", userId);
 
             $.ajax({
-                url:"./components/editProfile.php",
-                type:"POST",
-                data:formData,
-                dataType:"html",
-                contentType:false,
-                processData:false,
-                success:function(res){
+                url: "./components/editProfile.php",
+                type: "POST",
+                data: formData,
+                dataType: "html",
+                contentType: false,
+                processData: false,
+                success: function(res) {
                     Swal.fire({
-                        html:res,
-                        showConfirmButton:false
+                        html: res,
+                        showConfirmButton: false
                     })
                 }
             })
         })
 
-        $(document).on("click","#submitProfile",function(){
+        $(document).on("click", "#submitProfile", function() {
             let userId = $(this).data("id")
             let firstName = $('#firstName').val()
             let lastName = $('#lastName').val()
             let email = $('#email').val()
             let role = $('#role').val()
             let formData = new FormData();
-            formData.append("firstName",firstName);
-            formData.append("lastName",lastName)
-            formData.append("email",email)
-            formData.append("role",role)
-            formData.append("userId",userId)
+            formData.append("firstName", firstName);
+            formData.append("lastName", lastName)
+            formData.append("email", email)
+            formData.append("role", role)
+            formData.append("userId", userId)
 
             $.ajax({
-                url:"./backend/editProfile.php",
-                type:"POST",
-                data:formData,
-                dataType:"json",
-                contentType:false,
-                processData:false,
-                success:function(res){
+                url: "./backend/editProfile.php",
+                type: "POST",
+                data: formData,
+                dataType: "json",
+                contentType: false,
+                processData: false,
+                success: function(res) {
                     console.log(res)
-                    if(res.status == 200){
+                    if (res.status == 200) {
                         Swal.fire({
-                            title:"เพิ่มเสร็จสิ้น",
-                            icon:"success",
-                            timer:1000,
-                            showConfirmButton:false
+                            title: "เพิ่มเสร็จสิ้น",
+                            icon: "success",
+                            timer: 1000,
+                            showConfirmButton: false
                         }).then(() => {
                             window.location.reload()
                         })
-                    }else{
+                    } else {
                         Swal.fire({
-                            title:"เกิดข้อผิดพลาด",
-                            icon:"error",
-                            timer:1000,
-                            showConfirmButton:false
+                            title: "เกิดข้อผิดพลาด",
+                            icon: "error",
+                            timer: 1000,
+                            showConfirmButton: false
                         }).then(() => {
                             console.log(res.message)
                             window.location.reload()
@@ -294,36 +295,36 @@ $qUser = $db->query($sqlUSer);
             })
         })
 
-        $(document).on("click","#submitPassword",function(){
+        $(document).on("click", "#submitPassword", function() {
             let userId = $(this).data("id");
             let password = $('#password').val();
             let formData = new FormData();
-            formData.append("userId",userId)
-            formData.append("password",password)
+            formData.append("userId", userId)
+            formData.append("password", password)
 
             $.ajax({
-                url:"./backend/editPassword.php",
-                type:"POST",
-                data:formData,
-                dataType:"json",
-                contentType:false,
-                processData:false,
-                success:function(res){
-                    if(res.status == 200){
+                url: "./backend/editPassword.php",
+                type: "POST",
+                data: formData,
+                dataType: "json",
+                contentType: false,
+                processData: false,
+                success: function(res) {
+                    if (res.status == 200) {
                         Swal.fire({
-                            title:"แก้ไขเสร็จสิ้น",
-                            icon:"success",
-                            timer:1000,
-                            showConfirmButton:false
+                            title: "แก้ไขเสร็จสิ้น",
+                            icon: "success",
+                            timer: 1000,
+                            showConfirmButton: false
                         }).then(() => {
                             window.location.reload()
                         })
-                    }else{
+                    } else {
                         Swal.fire({
-                            title:"เกิดข้อผิดพลาด",
-                            icon:"error",
-                            timer:1000,
-                            showConfirmButton:false
+                            title: "เกิดข้อผิดพลาด",
+                            icon: "error",
+                            timer: 1000,
+                            showConfirmButton: false
                         }).then(() => {
                             console.log(res.message)
                             window.location.reload()
@@ -332,7 +333,6 @@ $qUser = $db->query($sqlUSer);
                 }
             })
         })
-
     </script>
 
 </body>

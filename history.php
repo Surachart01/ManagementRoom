@@ -11,7 +11,7 @@ try {
         }
     }
     $dataUser = $_SESSION['auth'];
-    $sqlCheckReserve = "SELECT rooms.roomName, rooms.codeRoom, orders.date, orders.id FROM orders  INNER JOIN rooms ON rooms.id = orders.roomId ";
+    $sqlCheckReserve = "SELECT rooms.roomName, rooms.codeRoom,orders.time, orders.date, orders.id FROM orders  INNER JOIN rooms ON rooms.id = orders.roomId ";
     // WHERE date >= CURRENT_DATE
     $qCheckReserve = $db->query($sqlCheckReserve);
 } catch (\Throwable $th) {
@@ -112,6 +112,7 @@ try {
                                 <th>ชื่อห้อง</th>
                                 <th>เลขห้อง</th>
                                 <th>วันที่จอง</th>
+                                <th>เวลา</th>
                                 <th>ผู้จอง</th>
                             </tr>
                         </thead>

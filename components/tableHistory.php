@@ -18,6 +18,7 @@
             <td><?php echo $item->roomName ?></td>
             <td><?php echo $item->codeRoom ?></td>
             <td><?php echo $item->date ?></td>
+            <td><?php echo $item->time ?></td>
             <td><?php echo $item->firstName." ".$item->lastName?></td>
         </tr>
         <?php  
