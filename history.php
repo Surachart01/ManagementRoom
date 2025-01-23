@@ -97,7 +97,9 @@ try {
         <div class="col-10">
             <div class="content mx-3 my-3">
                 <div class="d-flex justify-content-between px-3 py-3 " style="background-color:rgb(220, 220, 218);">
-                    <a href="./admin.php" class="mt-auto"><?= $dataUser->firstName?></a>
+                    <a href="./admin.php" class="mt-auto">
+                        <h5 class="my-auto">Admin</h5>
+                    </a>
                     <a href="./backend/logout.php" class="mt-auto">ออกจากระบบ</a>
                 </div>
                 <div class="row px-3 py-2">

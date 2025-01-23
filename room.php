@@ -95,7 +95,9 @@ try {
         <div class="col-10">
             <div class="content mx-3 my-3">
                 <div class="d-flex justify-content-between px-3 py-3 " style="background-color:rgb(220, 220, 218);">
-                    <a href="./admin.php" class="mt-auto"><?= $dataUser->firstName ?></a>
+                    <a href="./admin.php" class="mt-auto">
+                        <h5 class="my-auto">Admin</h5>
+                    </a>
                     <a href="./backend/logout.php" class="mt-auto">ออกจากระบบ</a>
                 </div>
                 <div class="row px-3 py-2">
@@ -103,12 +105,12 @@ try {
                     <table id="myTable">
                         <thead>
                             <tr>
-                                <th class="text-center" >#</th>
-                                <th class="text-center" >รูปห้อง</th>
-                                <th class="text-center" >ชื่อห้อง</th>
-                                <th class="text-center" >เลขห้อง</th>
-                                <th class="text-center" >รายละเอียด</th>
-                                <th class="text-center" ></th>
+                                <th class="text-center">#</th>
+                                <th class="text-center">รูปห้อง</th>
+                                <th class="text-center">ชื่อห้อง</th>
+                                <th class="text-center">เลขห้อง</th>
+                                <th class="text-center">รายละเอียด</th>
+                                <th class="text-center"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -196,7 +198,7 @@ try {
             let description = $('#description').val();
             formData.append("codeRoom", codeRoom)
             formData.append("roomName", roomName)
-            formData.append("description",description)
+            formData.append("description", description)
             $.ajax({
                 url: "./backend/insertRoom.php",
                 type: "POST",
@@ -243,7 +245,7 @@ try {
             formData.append("roomId", roomId)
             formData.append("codeRoom", codeRoom)
             formData.append("roomName", roomName)
-            formData.append("description",description)
+            formData.append("description", description)
             $.ajax({
                 url: "./backend/editRoom.php",
                 type: "POST",
