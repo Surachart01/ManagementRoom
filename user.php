@@ -125,7 +125,10 @@ $qUser = $db->query($sqlUSer);
                                     <td><?php echo $item->email ?></td>
                                     <td><?php echo ($item->role == 0) ? 'admin' : 'user'; ?></td>
                                     <td><button class="btn btn-warning" id="editPassword" data-id="<?php echo $item->id ?>">แก้ไขรหัสผ่าน</button></td>
-                                    <td><button class="btn btn-primary" id="editProfile" data-id="<?php echo $item->id ?>">แก้ไขข้อมูลส่วนตัว</button></td>
+                                    <td>
+                                        <button class="btn btn-primary" id="editProfile" data-id="<?php echo $item->id ?>">แก้ไขข้อมูลส่วนตัว</button>
+                                        <button class="btn btn-danger" id="deleteProfile"  data-id="<?php echo $item->id ?>">ลบ</button>
+                                    </td>
                                 </tr>
                             <?php
                                 $i++;
@@ -147,6 +150,44 @@ $qUser = $db->query($sqlUSer);
 
     <script>
         let table = new DataTable('#myTable');
+
+        $(document).on("click","#deleteProfile",function(){
+            let id = $(this).data("id");
+            let formData = new FormData()
+            formData.append("id",id)
+
+            $.ajax({
+                url:"./backend/deleteUser.php",
+                type:"post",
+                data:formData,
+                dataType:"json",
+                contentType:false,
+                processData:false,
+                success:function(res){
+                    if(res.status == '200'){
+                        Swal.fire({
+                            title:"ลบผู้ใช้งานเสร็จสิ้น",
+                            icon:"success",
+                            timer:2000,
+                            showConfirmButton:false
+                        }).then(() => {
+                            window.location.reload()
+                        })
+                    }else{
+                        Swal.fire({
+                            title:"เกิดข้อผิดพลาด",
+                            icon:"error",
+                            timer:2000,
+                            showConfirmButton:false
+                        }).then(() => {
+                            window.location.reload()
+                        })
+                    }
+                }
+
+
+            })
+        })
 
         $(document).on("click", "#insert", function() {
             $.ajax({
