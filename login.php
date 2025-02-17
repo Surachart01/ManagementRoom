@@ -56,6 +56,9 @@
             </div>
         </div>
    </div>
+   <div class="fixed-bottom text-center p-2" style="background-color: black; color: white;">
+        &copy; 2025 Wanwisa Sakronrussmee & Chanatip Nakniyom
+    </div>
 
 
     <!-- Bootstrap JavaScript Libraries -->

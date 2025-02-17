@@ -16,7 +16,12 @@ try {
     $sqlRooms = "SELECT * FROM orders WHERE date >= CURRENT_DATE";
     $qRoom = $db->query($sqlRooms);
     $dataUser = $_SESSION['auth'];
-    $sqlCheckReserve = "SELECT rooms.roomName, rooms.codeRoom, orders.date,orders.time, orders.id,users.firstName,users.lastName FROM orders  INNER JOIN rooms ON rooms.id = orders.roomId INNER JOIN users ON users.id = orders.userId WHERE orders.date >= CURRENT_DATE AND status ='0' ";
+    $sqlCheckReserve = "SELECT rooms.roomName, rooms.codeRoom, orders.date, orders.time, orders.id, users.firstName, users.lastName 
+    FROM orders  
+    INNER JOIN rooms ON rooms.id = orders.roomId 
+    INNER JOIN users ON users.id = orders.userId 
+    WHERE orders.date >= CURRENT_DATE AND status = '0'  
+    ORDER BY orders.date ASC";
     // WHERE date >= CURRENT_DATE
     $qCheckReserve = $db->query($sqlCheckReserve);
 } catch (\Throwable $th) {
@@ -103,7 +108,9 @@ try {
         <div class="col-10">
             <div class="content mx-3 my-3">
                 <div class="d-flex justify-content-between px-3 py-3 " style="background-color:rgb(220, 220, 218);">
-                    <a href="./admin.php" class="mt-auto"><h5 class="my-auto">Admin</h5></a>
+                    <a href="./admin.php" class="mt-auto">
+                        <h5 class="my-auto">Admin : <?= "$dataUser->firstName $dataUser->lastName" ?></h5>
+                    </a>
                     <a href="./backend/logout.php" class="mt-auto">ออกจากระบบ</a>
                 </div>
                 <div class="row px-3 py-2">
@@ -152,7 +159,8 @@ try {
                                                 <td><?php echo $item->roomName ?></td>
                                                 <td><?php echo $item->codeRoom ?></td>
                                                 <td><?php echo $item->firstName . " " . $item->lastName  ?></td>
-                                                <td><?php echo $item->date ?></td>
+                                                <td><?php echo date("d-m-Y", strtotime($item->date)); ?></td>
+
                                                 <td><?php echo $item->time ?></td>
                                                 <td>
                                                     <button class="btn btn-success" id="confirm" data-id="<?php echo $item->id ?>">อนุมัติ</button>
@@ -186,7 +194,7 @@ try {
             <script>
                 let table = new DataTable('#myTable');
 
-                $(document).on("click","#confirm",function(){
+                $(document).on("click", "#confirm", function() {
                     Swal.fire({
                         title: "คุณแน่ใจหรือไม่?",
                         text: "คุณต้องการอนุมัติการจองนี้หรือไม่?",
@@ -200,30 +208,30 @@ try {
                         if (result.isConfirmed) {
                             let orderId = $(this).data("id");
                             let formData = new FormData();
-                            formData.append("orderId",orderId);
+                            formData.append("orderId", orderId);
                             $.ajax({
-                                url:"./backend/confirmOrder.php",
-                                type:"POST",
-                                data:formData,
-                                dataType:'json',
-                                contentType:false,
-                                processData:false,
-                                success:function(res){
-                                    if(res.status == '200'){
+                                url: "./backend/confirmOrder.php",
+                                type: "POST",
+                                data: formData,
+                                dataType: 'json',
+                                contentType: false,
+                                processData: false,
+                                success: function(res) {
+                                    if (res.status == '200') {
                                         Swal.fire({
-                                            title:"อนุมัติการจองเสร็จสิ้น",
-                                            icon:"success",
-                                            showConfirmButton:false,
-                                            timer:1500
+                                            title: "อนุมัติการจองเสร็จสิ้น",
+                                            icon: "success",
+                                            showConfirmButton: false,
+                                            timer: 1500
                                         }).then(() => {
                                             window.location.reload()
                                         })
-                                    }else{
+                                    } else {
                                         Swal.fire({
-                                            title:"เกิดข้อผิดพลาด",
-                                            icon:"error",
-                                            showConfirmButton:false,
-                                            timer:1500
+                                            title: "เกิดข้อผิดพลาด",
+                                            icon: "error",
+                                            showConfirmButton: false,
+                                            timer: 1500
                                         }).then(() => {
                                             window.location.reload()
                                         })
@@ -234,7 +242,7 @@ try {
                     })
                 })
 
-                $(document).on("click","#notConfirm",function(){
+                $(document).on("click", "#notConfirm", function() {
                     Swal.fire({
                         title: "คุณแน่ใจหรือไม่?",
                         text: "คุณต้องการไม่อนุมัติการจองนี้หรือไม่?",
@@ -248,31 +256,31 @@ try {
                         if (result.isConfirmed) {
                             let orderId = $(this).data("id");
                             let formData = new FormData();
-                            formData.append("orderId",orderId);
+                            formData.append("orderId", orderId);
 
                             $.ajax({
-                                url:"./backend/unConfirmOrder.php",
-                                type:"POST",
-                                data:formData,
-                                dataType:'json',
-                                contentType:false,
-                                processData:false,
-                                success:function(res){
-                                    if(res.status == '200'){
+                                url: "./backend/unConfirmOrder.php",
+                                type: "POST",
+                                data: formData,
+                                dataType: 'json',
+                                contentType: false,
+                                processData: false,
+                                success: function(res) {
+                                    if (res.status == '200') {
                                         Swal.fire({
-                                            title:"ไม่อนุมัติการจองเสร็จสิ้น",
-                                            icon:"success",
-                                            showConfirmButton:false,
-                                            timer:1500
+                                            title: "ไม่อนุมัติการจองเสร็จสิ้น",
+                                            icon: "success",
+                                            showConfirmButton: false,
+                                            timer: 1500
                                         }).then(() => {
                                             window.location.reload()
                                         })
-                                    }else{
+                                    } else {
                                         Swal.fire({
-                                            title:"เกิดข้อผิดพลาด",
-                                            icon:"error",
-                                            showConfirmButton:false,
-                                            timer:1500
+                                            title: "เกิดข้อผิดพลาด",
+                                            icon: "error",
+                                            showConfirmButton: false,
+                                            timer: 1500
                                         }).then(() => {
                                             window.location.reload()
                                         })
