@@ -34,6 +34,7 @@ $rRoom = $qRoom->num_rows;
     <div class="row">
         <div class="col-12 d-flex justify-content-between bg-dark px-4  py-1 text-light shadow">
             <p class="my-auto"><img src="./images/Logo.gif" width="80px" alt=""></p>
+            <h6 class="my-auto me-auto ms-1">ระบบจองห้องประชุมออนไลน์วิทยาลัยเทคนิคลพบุรี</h6>
             <div class="d-flex my-auto ">
                 <a class="dropdown-toggle text-light" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     คุณ <?php echo $dataUser->firstName ?>
